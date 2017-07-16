@@ -9,7 +9,9 @@ $.fn.extend({
         placeholader: '请输入文章正文内容',
         validHtml: [],
         limitSize: 3,
-        showServer: false
+        showServer: false,
+        formInputId: 'artTarget',
+        showUploadBtn: true
     },
     artEditor: function (options) {
         var _this = this,
@@ -23,10 +25,14 @@ $.fn.extend({
             };
         $(this).css(styles).attr("contenteditable", true);
         _this._opt = $.extend(_this._opt, options);
+        
+        this.initArtDom()
+
         try {
             $(_this._opt.imgTar).on('change', function (e) {
-                var file = e.target.files[0];
-                e.target.value = '';
+                var files = e.target.files 
+                var file = files[0];
+                // e.target.value = '';
                 if (Math.ceil(file.size / 1024 / 1024) > _this._opt.limitSize) {
                     console.error('文件太大');
                     return;
@@ -43,13 +49,19 @@ $.fn.extend({
                             data = _this.compressHandler(img);
                         }, 10);
                     }
+                    /*
                     if (_this._opt.showServer) {
                         _this.upload(data);
                         return;
                     }
-                    var image = '<img src="' + data + '" style="max-width:100%;" />';
-                    _this.insertImage(image);
+                    */
+                    // var image = '<img src="' + data + '" style="max-width:100%;" />';
+                    // _this.insertImage(image);
                 };
+                // 覆写图片上传方法
+                if (_this._opt.showServer) {
+                  _this.upload(files);
+                }
             });
             _this.placeholderHandler();
             _this.pasteHandler();
@@ -66,6 +78,7 @@ $.fn.extend({
             setTimeout(function() {
                 var selection = window.getSelection ? window.getSelection() : document.selection;
                 _this.range = selection.createRange ? selection.createRange() : selection.getRangeAt(0);
+                console.log(_this.range)
             },10);
             return false;
         });
@@ -79,6 +92,20 @@ $.fn.extend({
             });
         }
         
+    },
+
+    initArtDom: function () {
+      var _this = this
+      $(this).addClass('art-editor')
+      if (_this._opt.showUploadBtn) {
+        $(_this).after('<div class="art-upload">' +
+          '<div class="upload-button">' +
+            '<span class="upload"><i class="upload-img"></i>插入图片</span>' +
+            '<input class="input-file" id="imageUpload" type="file" name="fileInput" accept="image/*" style="position:absolute;left:0;opacity:0;width:100%;">' +
+          '</div>' +
+        '</div>')
+        $(this).after('<input type="hidden" id="' + 'artTarget' + '">')
+      }
     },
     compressHandler: function(img) {
         var canvas = document.createElement("canvas");
@@ -121,17 +148,31 @@ $.fn.extend({
         return ndata;
     },
     upload: function (data) {
-        var _this = this, filed = _this._opt.uploadField || 'uploadfile';
-        var postData = $.extend(_this._opt.data, {});
-        postData[filed] = data;
+        var _this = this, filed = _this._opt.uploadField || 'file';
+        var postData = new FormData()
+        postData.append(filed, data[0])
+        var optData = _this._opt.data
+        for (var k in optData) {
+          postData.append(k, optData[k])
+        }
+
+        // var postData = $.extend(_this._opt.data, {});
+        // postData[filed] = data;
         $.ajax({
             url: _this._opt.uploadUrl,
             type: 'post',
             data: postData,
             cache: false,
+            contentType: false,
+            processData: false
         })
         .then(function (res) {
-                var src = _this._opt.uploadSuccess(res);
+                _this._opt.imgTar.value = ''
+                var src = ''
+                _this._opt.uploadSuccess && _this._opt.uploadSuccess(res)
+                if (res.status === 2000) {
+                  src = res.data.url
+                }
                 if (src) {
                     var img = '<img src="' + src + '" style="max-width:100%;" />';
                     _this.insertImage(img);

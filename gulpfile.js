@@ -15,7 +15,7 @@ gulp.task('watch', function () {
         }
     });
     gulp.watch("*.html").on('change', reload);
-    gulp.watch("src/*.js", ['minifyjs']).on('change', reload);
+    gulp.watch("src/*.js", ['default']).on('change', reload);
     gulp.watch("example/*").on('change', reload);
 });
 

@@ -10,27 +10,15 @@
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<link rel="stylesheet" href="example/css/style.css">
 </head>
-<body>
+<body style="background: #ddd;margin: 0;padding: 0;height: 1500px;">
 	<div style="width:100%;margin: 0 auto;">
-		<div class="publish-article-title">
-			<div class="title-tips">标题</div>
-			<input type="text" id="title" class="w100" placeholder="文章标题">
-		</div>
-		<div class="publish-article-content">
-			<div class="title-tips">正文</div>
-			<input type="hidden" id="target">
-			<div class="article-content" id="content">
-			</div>
-			<div class="footer-btn g-image-upload-box">
-				<div class="upload-button">
-					<span class="upload"><i class="upload-img"></i>插入图片</span>
-					<input class="input-file" id="imageUpload" type="file" name="fileInput" accept="image/*" style="position:absolute;left:0;opacity:0;width:100%;">
-				</div>
-			</div>
+			<h2>正文</h2>
+			<div id="content"></div>
 		</div>
 	</div>
 	<script src="example/js/jquery-1.11.2.js"></script>
-	<script src="dist/index.min.js"></script>
+	<!-- <script src="dist/index.min.js"></script> -->
+	<script src="src/index.js"></script>
 	<script src="example/js/index.js"></script>
 </body>
 </html>
