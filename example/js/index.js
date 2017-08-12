@@ -1,6 +1,6 @@
 $(function () {
     "use strict";
-    $('#content').artEditor({
+    var editor = $('#content').artEditor({
         imgTar: '#imageUpload',
         limitSize: 5,   // 兆
         showServer: true,
@@ -38,4 +38,14 @@ $(function () {
             alert('网络异常' + status)
         }
     });
+      console.log(editor)
+
+    $('#getValue').on('click', function () {
+      var html = editor.getValue()
+      console.log(html)
+    })
+
+    $('#setValue').on('click', function () {
+      editor.setValue('<p>test1</p><p>test2</p><p>test3</p>')
+    })
 });

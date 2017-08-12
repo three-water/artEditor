@@ -26,6 +26,10 @@
   font-size: 16px;
 }
 
+.art-editor p {
+  margin: 0;
+}
+
 .art-editor img {
   display: block;
   max-width: 100%;
@@ -44,7 +48,7 @@
   text-align: center;
   padding: 10px 0;
   background: #fff;
-  position: fixed;
+  /* position: fixed; */
   width: 100%;
   bottom: 0;
   left: 0;
