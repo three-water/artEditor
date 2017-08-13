@@ -70,14 +70,14 @@ $.fn.extend({
     }
     if (_this._opt.formInputId && $('#' + _this._opt.formInputId)[0]) {
       $(_this).on('input', function () {
-        $('#' + _this._opt.formInputId).val(_this.getValue());
+        var val = _this.getValue()
+        $('#' + _this._opt.formInputId).val(val)
+        // 调用原生的change事件的回调，客户端内容有改变
+        if (window.native && window.native.onTextChange) {
+          window.native.onTextChange(val)
+        }
       });
     }
-
-    // 点击图片右侧自动插入光标
-    $(this).on('click', 'img', function () {
-      console.log(2)
-    })
 
     $(this).on('input click', function () {
       var $self = $(this)
@@ -153,6 +153,47 @@ $.fn.extend({
     tCanvas.width = tCanvas.height = canvas.width = canvas.height = 0;
     return ndata;
   },
+  preUpload: function (imgUrl) {
+    var _this = this, filed = _this._opt.uploadField || 'file';
+
+    // 插入上传中图片结构
+    this.insertImage('<div class="art-img-box"><img src="' + imgUrl + '" /></div>')
+
+    var postData = new FormData()
+    postData.append(filed, data[0])
+    var optData = _this._opt.data
+    for (var k in optData) {
+      postData.append(k, optData[k])
+    }
+
+    // var postData = $.extend(_this._opt.data, {});
+    // postData[filed] = data;
+    $.ajax({
+        url: _this._opt.uploadUrl,
+        type: 'post',
+        data: postData,
+        cache: false,
+        contentType: false,
+        processData: false
+      })
+      .then(function (res) {
+        _this._opt.imgTar.value = ''
+        var src = ''
+        _this._opt.uploadSuccess && _this._opt.uploadSuccess(res)
+        if (res.status === 2000) {
+          src = res.data.url
+        }
+        if (src) {
+          var img = '<img src="' + src + '" style="max-width:100%;" />';
+          _this.insertImage(img);
+        } else {
+          console.log('地址为空啊!大兄弟', src)
+        }
+      }, function (error) {
+        _this._opt.uploadError(error.status, error);
+      })
+
+  },
   upload: function (data) {
     var _this = this,
       filed = _this._opt.uploadField || 'file';
@@ -192,6 +233,9 @@ $.fn.extend({
 
   },
   insertImage: function (src) {
+    if (!/<img\s/.test(src)) {
+      src = '<img src="' + src + '" style="max-width:100%;" />'
+    }
     $(this).focus();
     var selection = window.getSelection ? window.getSelection() : document.selection;
     var range;

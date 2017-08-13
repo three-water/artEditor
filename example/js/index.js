@@ -48,4 +48,24 @@ $(function () {
     $('#setValue').on('click', function () {
       editor.setValue('<p>test1</p><p>test2</p><p>test3</p>')
     })
+
+    $('#insertImg').on('click', function () {
+      editor.insertImage('http://react-china.org/uploads/default/38/c4b96a594bd352e0.png')
+    })
+
+    function setValue(str){
+      editor.setValue(str)
+    }
+
+    function getValue(){
+        return editor.getValue();
+    }
+
+    /**
+     * 插如图片
+     * @param {*} src - 图片的url或者base64编码
+     */
+    function insertImage(src){
+      editor.insertImage('src')
+    }
 });
