@@ -68,5 +68,40 @@ function getValue(){
  * @param {*} src - 图片的url或者base64编码
  */
 function insertImage(src){
-  editor.insertImage('src')
+  editor.insertImage(src)
+}
+
+/**
+ * 上传前插如图片
+ * @param {*} src - 图片的base64编码
+ * @return {String} - guid唯一标识
+ */
+function preUpload (src) {
+  return editor.preUpload(src)
+}
+
+/**
+ * 更新图片的上传进度
+ * @param {*} guid - 该上传实例的guid
+ * @param {*} percent - 上传进度百分比，如 '40%' 
+ */
+function updateProgress (guid, percent) {
+  return editor.updateProgress(guid, percent)
+}
+
+/**
+ * 完成图片上传
+ * @param {*} guid - 上传实例的guid
+ * @param {*} src - 图片的oss url地址，此处用于替换掉原有的base64编码
+ */
+function uploadSuccess (guid, src) {
+  return editor.uploadSuccess(guid, src)
+}
+
+/**
+ * 判断当前编辑器内是否有文件正在上传
+ * @return {Boolean} - 是否有正在上传的文件
+ */
+function isUploading () {
+  return editor.isUploading()
 }

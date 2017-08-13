@@ -59,6 +59,25 @@
   width: 25px;
   height: 20px;
   margin-right: 10px;
-  background: url(../img/img.png) 0 no-repeat;
+  background: url(./img/img.png) 0 no-repeat;
   background-size: 100%;
+}
+
+.art-img-box.loading {
+  opacity: 0.6;
+  position: relative;
+}
+.art-img-box .progress {
+  display: none;
+  position: absolute;
+  width: 0;
+  height: 2px;
+  top:0;
+  left: 0;
+  background: #9554b9;
+  z-index: 2;
+  transition: width 0.5s;
+}
+.art-img-box.loading .progress {
+  display: block;
 }

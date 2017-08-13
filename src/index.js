@@ -5,6 +5,7 @@
  */
 /* eslint-disable */
 // import $ from 'jquery'
+;(function() {
 $.fn.extend({
   _opt: {
     placeholder: '请输入文章正文内容',
@@ -153,84 +154,84 @@ $.fn.extend({
     tCanvas.width = tCanvas.height = canvas.width = canvas.height = 0;
     return ndata;
   },
+  readFile: function (file) {
+    return new Promise(function (resolve, reject) {
+      var reader = new FileReader();  
+      //将文件以Data URL形式读入页面  
+      reader.readAsDataURL(file);  
+      reader.onload = function(e){
+        resolve(this.result)
+      }  
+    })
+  },
   preUpload: function (imgUrl) {
+    var guid = newGuid()
     var _this = this, filed = _this._opt.uploadField || 'file';
-
     // 插入上传中图片结构
-    this.insertImage('<div class="art-img-box"><img src="' + imgUrl + '" /></div>')
-
-    var postData = new FormData()
-    postData.append(filed, data[0])
-    var optData = _this._opt.data
-    for (var k in optData) {
-      postData.append(k, optData[k])
+    this.insertImage('<div class="art-img-box loading" guid="' + guid + '"><span class="progress"></span><img src="' + imgUrl + '" /></div>')
+    return guid
+  },
+  // 更新上传进度
+  updateProgress: function (guid, percent) {
+    this.find('div[guid="' + guid + '"] .progress').width(percent)
+  },
+  // 完成图片上传
+  uploadSuccess: function (guid, src) {
+    var _this = this
+    var img = new Image()
+    var imgBox = this.find('div[guid="' + guid + '"]')
+    img.src = src
+    img.onload = function () {
+      imgBox.removeClass('loading').removeAttr('guid').empty().append(img)
+      $(_this).trigger('input')
+      $(_this).trigger('art-uploading')
     }
-
-    // var postData = $.extend(_this._opt.data, {});
-    // postData[filed] = data;
-    $.ajax({
-        url: _this._opt.uploadUrl,
-        type: 'post',
-        data: postData,
-        cache: false,
-        contentType: false,
-        processData: false
-      })
-      .then(function (res) {
-        _this._opt.imgTar.value = ''
-        var src = ''
-        _this._opt.uploadSuccess && _this._opt.uploadSuccess(res)
-        if (res.status === 2000) {
-          src = res.data.url
-        }
-        if (src) {
-          var img = '<img src="' + src + '" style="max-width:100%;" />';
-          _this.insertImage(img);
-        } else {
-          console.log('地址为空啊!大兄弟', src)
-        }
-      }, function (error) {
-        _this._opt.uploadError(error.status, error);
-      })
-
   },
   upload: function (data) {
-    var _this = this,
-      filed = _this._opt.uploadField || 'file';
-    var postData = new FormData()
-    postData.append(filed, data[0])
-    var optData = _this._opt.data
-    for (var k in optData) {
-      postData.append(k, optData[k])
+    var _this = this, filed = _this._opt.uploadField || 'file';
+    if (data.length > 0) {
+      for (var i = 0; i < data.length; i++) {
+        ;(function(n){
+          _this.readFile(data[n]).then(function (src) {
+          var guid = _this.preUpload(src)
+          var postData = new FormData()
+          postData.append(filed, data[n])
+          var optData = _this._opt.data
+          for (var k in optData) {
+            postData.append(k, optData[k])
+          }
+          $(_this).trigger('art-uploading')
+          $.ajax({
+            url: _this._opt.uploadUrl,
+            type: 'post',
+            data: postData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            xhr: function(){
+      　　　　　　var xhr = $.ajaxSettings.xhr();
+      　　　　　　if(_this.updateProgress && xhr.upload) {
+      　　　　　　　xhr.upload.addEventListener("progress" , function (e) {
+                    _this.updateProgress(guid, parseInt(e.loaded / e.total * 100) + '%')
+                  }, false);
+                }
+    　　　　　　　　return xhr;
+      　　　　} 
+          }).done(function (res) {
+            _this._opt.imgTar.value = ''
+            var src = ''
+            _this._opt.uploadSuccess && _this._opt.uploadSuccess(res)
+            if (res.status === 2000) {
+              _this.uploadSuccess(guid, res.data.url)
+            }
+          }).fail(function (error) {
+            _this._opt.uploadError(error.status, error);
+          })
+        })
+      })(i)
+      }
     }
-
-    // var postData = $.extend(_this._opt.data, {});
-    // postData[filed] = data;
-    $.ajax({
-        url: _this._opt.uploadUrl,
-        type: 'post',
-        data: postData,
-        cache: false,
-        contentType: false,
-        processData: false
-      })
-      .then(function (res) {
-        _this._opt.imgTar.value = ''
-        var src = ''
-        _this._opt.uploadSuccess && _this._opt.uploadSuccess(res)
-        if (res.status === 2000) {
-          src = res.data.url
-        }
-        if (src) {
-          var img = '<img src="' + src + '" style="max-width:100%;" />';
-          _this.insertImage(img);
-        } else {
-          console.log('地址为空啊!大兄弟', src)
-        }
-      }, function (error) {
-        _this._opt.uploadError(error.status, error);
-      })
-
+      return 
   },
   insertImage: function (src) {
     if (!/<img\s/.test(src)) {
@@ -275,9 +276,7 @@ $.fn.extend({
   pasteHandler: function () {
     var _this = this;
     $(this).on("paste", function (e) {
-      console.log(e.clipboardData.items);
       var content = $(this).html();
-      console.log(content);
       valiHTML = _this._opt.validHtml;
       content = content.replace(/_moz_dirty=""/gi, "").replace(/\[/g, "[[-").replace(/\]/g, "-]]").replace(/<\/ ?tr[^>]*>/gi, "[br]").replace(/<\/ ?td[^>]*>/gi, "&nbsp;&nbsp;").replace(/<(ul|dl|ol)[^>]*>/gi, "[br]").replace(/<(li|dd)[^>]*>/gi, "[br]").replace(/<p [^>]*>/gi, "[br]").replace(new RegExp("<(/?(?:" + valiHTML.join("|") + ")[^>]*)>", "gi"), "[$1]").replace(new RegExp('<span([^>]*class="?at"?[^>]*)>', "gi"), "[span$1]").replace(/<[^>]*>/g, "").replace(/\[\[\-/g, "[").replace(/\-\]\]/g, "]").replace(new RegExp("\\[(/?(?:" + valiHTML.join("|") + "|img|span)[^\\]]*)\\]", "gi"), "<$1>");
       if (!/firefox/.test(navigator.userAgent.toLowerCase())) {
@@ -304,6 +303,9 @@ $.fn.extend({
       $(this).html('<div class="placeholder" style="pointer-events: none;">' + _this._opt.placeholder + '</div>');
     }
   },
+  isUploading: function () {
+    return $(this).find('.art-img-box.loading').length > 0
+  },
   getValue: function () {
     return $(this).html();
   },
@@ -311,3 +313,13 @@ $.fn.extend({
     $(this).html(str);
   }
 });
+
+function newGuid () {
+  return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+};
+
+function S4 () {
+  return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+}
+
+})()
