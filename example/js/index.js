@@ -1,6 +1,7 @@
+var editor = $('#content')
 $(function () {
     "use strict";
-    var editor = $('#content').artEditor({
+    editor = $('#content').artEditor({
         imgTar: '#imageUpload',
         limitSize: 5,   // 兆
         showServer: true,
