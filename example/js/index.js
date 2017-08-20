@@ -3,9 +3,7 @@ $(function () {
     "use strict";
     editor = $('#content').artEditor({
         imgTar: '#imageUpload',
-        limitSize: 5,   // 兆
         showServer: true,
-        // uploadUrl: 'http://localhost/PROJECT_OWN/NodeJS/artEditor/service/service.php',
         uploadUrl: 'http://admin-api.s1.natapp.cc/file/upload',
         data: {},
         uploadField: 'file',
@@ -55,10 +53,37 @@ $(function () {
     })
 });
 
+/**********************
+ * 配置参数
+ **********************/
+/**
+ * @param {String} [placeholder=请输入文章正文内容] - 编辑器占位文字
+ * @param {Boolean} [showUploadBtn=true] - 是否显示上传按钮 
+ * @param {Boolean} [showServer=true] - 是否开启服务端上传
+ * @param {String} [uploadUrl] - 图片上传地址
+ * @param {Object} [data={}] - 上传附带参数
+ * @param {Int} [compressSize] - 触发h5压缩的图片大小
+ */
+
+
+
+
+
+/*******************
+ * api
+ *******************/
+
+/**
+ * 赋值
+ * @param {*} str 
+ */
 function setValue(str){
   editor.setValue(str)
 }
 
+/**
+ * 取值
+ */
 function getValue(){
     return editor.getValue();
 }
@@ -73,11 +98,10 @@ function insertImage(src){
 
 /**
  * 上传前插如图片
- * @param {*} src - 图片的base64编码
  * @return {String} - guid唯一标识
  */
-function preUpload (src) {
-  return editor.preUpload(src)
+function preUpload () {
+  return editor.preUpload()
 }
 
 /**
@@ -92,7 +116,7 @@ function updateProgress (guid, percent) {
 /**
  * 完成图片上传
  * @param {*} guid - 上传实例的guid
- * @param {*} src - 图片的oss url地址，此处用于替换掉原有的base64编码
+ * @param {*} src - 图片的oss url地址，此处用于替换掉原有的占位图片
  */
 function uploadSuccess (guid, src) {
   return editor.uploadSuccess(guid, src)
