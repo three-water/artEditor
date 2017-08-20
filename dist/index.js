@@ -12,10 +12,12 @@
     _opt: {
       placeholder: '请输入文章正文内容',
       validHtml: [],
+      limitSize: 3,
       showServer: false,
       formInputId: 'artTarget',
       showUploadBtn: true,
-      compressSize: 500
+      compressSize: 500,
+      imgHandler: ''
     },
     artEditor: function (options) {
       var _this = this,
@@ -95,7 +97,6 @@
             var data = f.target.result,
               img = new Image();
             img.src = f.target.result;
-            // console.log(data)
             // 解决Firefox读取不到图片高、宽
             setTimeout(function () {
               var data = _this.compressHandler(img)
@@ -231,7 +232,7 @@
       var _this = this
       var img = new Image()
       var imgBox = this.find('div[guid="' + guid + '"]')
-      img.src = src
+      img.src = src + this.imgHandler
       img.onload = function () {
         imgBox.removeClass('loading').removeAttr('guid').empty().append(img)
         $(_this).trigger('input')
@@ -374,4 +375,4 @@
     return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
   }
 
-})();
+})()

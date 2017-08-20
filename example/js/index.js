@@ -63,6 +63,7 @@ $(function () {
  * @param {String} [uploadUrl] - 图片上传地址
  * @param {Object} [data={}] - 上传附带参数
  * @param {Int} [compressSize] - 触发h5压缩的图片大小
+ * @param {String} [imgHandler] - 图片阿里云处理后缀
  */
 
 
