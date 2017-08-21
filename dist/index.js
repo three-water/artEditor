@@ -145,8 +145,8 @@
           '</div>' +
           '</div>')
         _this._opt.imgTar = $(_this).parent().find('#imageUpload')[0]
-        $(this).after('<input type="hidden" id="artTarget">')
       }
+      $(this).after('<input type="hidden" id="artTarget">')
     },
     compressHandler: function (img) {
       var _this = this;
