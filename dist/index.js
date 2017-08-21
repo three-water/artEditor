@@ -14,7 +14,6 @@
       validHtml: [],
       limitSize: 3,
       showServer: false,
-      formInputId: 'artTarget',
       showUploadBtn: true,
       compressSize: 500,
       imgHandler: ''
@@ -56,16 +55,14 @@
       } catch (e) {
         console.log(e);
       }
-      if (_this._opt.formInputId && $('#' + _this._opt.formInputId)[0]) {
         $(_this).on('input', function () {
           var val = _this.getValue()
-          $('#' + _this._opt.formInputId).val(val)
+          $(_this).find('#artTarget').val(val)
           // 调用原生的change事件的回调，客户端内容有改变
           if (window.native && window.native.onTextChange) {
             window.native.onTextChange(val)
           }
         });
-      }
 
       $(this).on('input click', function () {
         var $self = $(this)
@@ -145,8 +142,8 @@
           '</div>' +
           '</div>')
         _this._opt.imgTar = $(_this).parent().find('#imageUpload')[0]
+        $(this).after('<input type="hidden" id="artTarget">')
       }
-      $(this).after('<input type="hidden" id="artTarget">')
     },
     compressHandler: function (img) {
       var _this = this;
@@ -321,9 +318,7 @@
         selection.removeAllRanges();
         selection.addRange(range);
       }
-      if (this._opt.formInputId && $('#' + this._opt.formInputId)[0]) {
-        $('#' + this._opt.formInputId).val(this.getValue());
-      }
+      $(this).find('#artTarget').val(this.getValue())
       $(this).trigger('input')
     },
     pasteHandler: function () {

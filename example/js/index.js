@@ -10,6 +10,7 @@ $(function () {
         breaks: false,
         placeholader: '请输入文章正文内容',
         validHtml: ["<br/>"],
+        showUploadBtn: false,
         uploadSuccess: function (res) {
             // 这里是处理返回数据业务逻辑的地方
             // `res`为服务器返回`status==200`的`response`
