@@ -26,7 +26,8 @@
           "overflow-y": "auto",
           "text-break": "brak-all",
           "outline": "none",
-          "cursor": "text"
+          "cursor": "text",
+          "-webkit-tap-highlight-color": "transparent"
         };
       $(this).css(styles).attr("contenteditable", true);
       _this._opt = $.extend(_this._opt, options);
