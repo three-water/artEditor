@@ -11,16 +11,17 @@
 	<link rel="stylesheet" href="example/css/style.css">
 </head>
 <body style="margin: 0;padding: 0;height: 1500px;">
-	<div style="width:100%;margin: 0 auto;">
+	<div style="width:100%;margin: 0 auto;height: 100%;overflow: auto;">
 			<h2>正文</h2>
 			<div id="content"></div>
-    </div>
-    
     <button id="getValue">getValue</button>
     <button id="setValue">setValue</button>
     <button id="insertImg">insertImg</button>
-	</div>
+  </div>
 	<script src="example/js/jquery-1.11.2.js"></script>
+  <script>
+    $('body').css('height', document.documentElement.clientHeight + 'px');
+  </script>
 	<!-- <script src="dist/index.min.js"></script> -->
 	<script src="src/index.js"></script>
 	<script src="example/js/index.js"></script>
