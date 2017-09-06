@@ -356,7 +356,7 @@
       return $(this).find('.art-img-box.loading').length > 0
     },
     getValue: function () {
-      return $(this).html();
+      return $(this).html().replace(/^(\s|&nbsp;)+|(\s|&nbsp;)+$/g, '');
     },
     setValue: function (str) {
       $(this).html(str);
