@@ -16,16 +16,22 @@
 }
 
 .art-editor {
-  min-height: 400px;
-  /* border-bottom: 1px solid #ccc; */
+  min-height: 200px;
+  border-bottom: 1px solid #ccc;
   background: #fff;
   padding: 12px;
   font-family: "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", "宋体", Arial, Verdana, sans-serif;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
-  font-size: 16px;
   color: #484848;
+
+  font-size: 17px !important;
+  line-height: 28px !important;
+  text-align: left;
 }
+
+.art-editor img {padding: 12px 0; width: 100%; height: auto;} 
+.art-editor p{color: #484848;}
 
 .art-editor p {
   margin: 0;
@@ -60,7 +66,7 @@
   width: 25px;
   height: 20px;
   margin-right: 10px;
-  background: url(../img/img.png) 0 no-repeat;
+  background: url(./img/img.png) 0 no-repeat;
   background-size: 100%;
 }
 
