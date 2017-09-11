@@ -17,7 +17,7 @@
 
 .art-editor {
   min-height: 200px;
-  border-bottom: 1px solid #ccc;
+  /* border-bottom: 1px solid #ccc; */
   background: #fff;
   padding: 12px;
   font-family: "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", "宋体", Arial, Verdana, sans-serif;
@@ -87,17 +87,4 @@
 }
 .art-img-box.loading .progress {
   display: block;
-}
-
-.art-editor img {
-  margin: 8px 0;
-  width: 100%;
-  height: auto;
-}
-
-.art-editor p {
-  color: #484848;
-  line-height: 25px;
-  font-size: 17px;
-  text-align: left;
 }
