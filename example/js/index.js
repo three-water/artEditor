@@ -46,7 +46,7 @@ $(function () {
     })
 
     $('#setValue').on('click', function () {
-      editor.setValue('<p>test1</p><p>test2</p><p>test3</p>')
+      editor.setValue('<p>test1</p><script src="sddd"></script><p>test2</p><p>test3</p>')
     })
 
     $('#insertImg').on('click', function () {

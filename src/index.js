@@ -356,10 +356,29 @@
       return $(this).find('.art-img-box.loading').length > 0
     },
     getValue: function () {
-      return $(this).html().replace(/^(\s|&nbsp;)+|(\s|&nbsp;)+$/g, '');
+      var value = $(this).html().replace(/^(\s|&nbsp;)+|(\s|&nbsp;)+$/g, '');
+      return this.contentFilter(value)
     },
     setValue: function (str) {
+      str = str === undefined ? '' : str;
+      str = this.contentFilter(str);
       $(this).html(str);
+    },
+    contentFilter: function(content) {
+      if (!content) return
+      // script
+      var reg=/<script[^>|^<]*>.*(?=<\/script>)<\/script>/gi;
+      var content1 = content.replace(reg,'')
+      // style标签
+      var StyleReg = /<style[^>]*>.*(?=<\/style>)<\/style>/gi;
+      var content2 = content1.replace(StyleReg,'')
+      // link
+      var LinkReg = /<link[^>]*>/gi
+      var content3 = content2.replace(LinkReg,'')
+      // style属性
+      var innerStlyeReg = /style\s*=\s*('[^']*'|"[^"]*")/gi;
+      var content4 = content3.replace(innerStlyeReg, '')
+      return content4
     }
   });
 
