@@ -365,7 +365,7 @@
       $(this).html(str);
     },
     contentFilter: function(content) {
-      if (!content) return
+      if (content === '' || content === undefined) return ''
       // script
       var reg=/<script[^>|^<]*>.*(?=<\/script>)<\/script>/gi;
       var content1 = content.replace(reg,'')
