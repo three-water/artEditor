@@ -4,11 +4,11 @@ $(function () {
     editor = $('#content').artEditor({
         imgTar: '#imageUpload',
         showServer: true,
-        uploadUrl: 'http://admin-api.s1.natapp.cc/file/upload',
+        uploadUrl: 'https://app-api.yirimao.com/file/upload',
         data: {},
         uploadField: 'file',
         breaks: false,
-        placeholader: '请输入文章正文内容',
+        placeholder: '请输入内容',
         validHtml: ["<br/>"],
         showUploadBtn: false,
         uploadSuccess: function (res) {

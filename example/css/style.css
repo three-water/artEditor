@@ -6,13 +6,13 @@
   -webkit-text-fill-color: #bdbdbd;
 }
 .art-editor ::-moz-placeholder {
-  color: #dddddd;
+  color: #ccc;
 }
 .art-editor input:-ms-input-placeholder {
-  color: #dddddd;
+  color: #ccc;
 }
 .art-editor textarea:-ms-input-placeholder {
-  color: #dddddd;
+  color: #ccc;
 }
 
 .art-editor {
@@ -20,7 +20,7 @@
   /* border-bottom: 1px solid #ccc; */
   background: #fff;
   padding: 18px;
-  font-family: "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", "宋体", Arial, Verdana, sans-serif;
+  font-family: "PingFangSC-Regular", "Microsoft YaHei", "微软雅黑", "Hiragino Sans GB",  "宋体", Arial, Verdana, sans-serif;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   color: #484848;
@@ -42,8 +42,8 @@
   max-width: 100%;
 }
 
-.art-editor .placeholader {
-  color: #ddd;
+.art-editor .placeholder {
+  color: #ccc;
 }
 
 .art-editor a {

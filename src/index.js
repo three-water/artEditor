@@ -63,6 +63,9 @@
           if (window.native && window.native.onTextChange) {
             window.native.onTextChange(val)
           }
+          if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.onTextChange) {
+            window.webkit.messageHandlers.onTextChange.postMessage(val)
+          }
         });
 
       $(this).on('input click', function () {
