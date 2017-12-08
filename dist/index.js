@@ -233,7 +233,7 @@
       var _this = this
       var img = new Image()
       var imgBox = this.find('div[guid="' + guid + '"]')
-      img.src = src + this.imgHandler
+      img.src = src + this._opt.imgHandler
       img.onload = function () {
         imgBox.removeClass('loading').removeAttr('guid').empty().append(img)
         $(_this).trigger('input')

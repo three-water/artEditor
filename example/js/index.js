@@ -38,7 +38,6 @@ $(function () {
             alert('网络异常' + status)
         }
     });
-      console.log(editor)
 
     $('#getValue').on('click', function () {
       var html = editor.getValue()
