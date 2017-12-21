@@ -51,6 +51,13 @@ $(function () {
     $('#insertImg').on('click', function () {
       editor.insertImage('http://react-china.org/uploads/default/38/c4b96a594bd352e0.png')
     })
+
+
+    var wid = editor.preUpload()
+    editor.updateProgress(wid, '30%')
+
+    var wid2 = editor.preUpload()
+    editor.updateProgress(wid2, '30%')
 });
 
 /**********************

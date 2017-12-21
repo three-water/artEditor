@@ -32,7 +32,8 @@
       $(this).css(styles).attr("contenteditable", true);
       _this._opt = $.extend(_this._opt, options);
       this.initArtDom()
-
+      // 初始化删除事件处理
+      this.initDeleteHandle()
       try {
         $(_this._opt.imgTar).on('change', function (e) {
           var files = e.target.files
@@ -56,17 +57,18 @@
       } catch (e) {
         console.log(e);
       }
-        $(_this).on('input', function () {
-          var val = _this.getValue()
-          $(_this).find('#artTarget').val(val)
-          // 调用原生的change事件的回调，客户端内容有改变
-          if (window.native && window.native.onTextChange) {
-            window.native.onTextChange(val)
-          }
-          if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.onTextChange) {
-            window.webkit.messageHandlers.onTextChange.postMessage(val)
-          }
-        });
+
+      $(_this).on('input', function () {
+        var val = _this.getValue()
+        $(_this).find('#artTarget').val(val)
+        // 调用原生的change事件的回调，客户端内容有改变
+        if (window.native && window.native.onTextChange) {
+          window.native.onTextChange(val)
+        }
+        if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.onTextChange) {
+          window.webkit.messageHandlers.onTextChange.postMessage(val)
+        }
+      });
 
       $(this).on('input click', function () {
         var $self = $(this)
@@ -382,6 +384,38 @@
       var innerStlyeReg = /style\s*=\s*('[^']*'|"[^"]*")/gi;
       var content4 = content3.replace(innerStlyeReg, '')
       return content4
+    },
+    // 删除事件初始化处理，删除正在上传的图片时，将整个图片dom结构一起删掉
+    initDeleteHandle: function () {
+      $(this).on('input', function (e) {
+        console.log(window.getSelection())
+        var selection = window.getSelection()
+        var anchorNode = $(selection.anchorNode)
+        if (e.originalEvent && e.originalEvent.inputType === 'deleteContentBackward') {
+          if (anchorNode.hasClass('art-img-box') && anchorNode.hasClass('loading') && selection.anchorOffset === 1) {
+            anchorNode.remove()
+          }
+        }
+        
+        if (e.originalEvent && e.originalEvent.inputType === 'insertParagraph') {
+          if (anchorNode.hasClass('art-img-box') && anchorNode.hasClass('loading') && selection.anchorOffset === 0) {
+            // 光标在图片后面的换行
+            anchorNode.removeClass('art-img-box')
+          } else if (anchorNode.hasClass('art-img-box') && anchorNode.hasClass('loading') && selection.anchorOffset <= 2) {
+            // 光标在图片前面的换行
+            var br = anchorNode.find('.art-img-box').children()
+            anchorNode.before(br)
+            selection.collapse(br[0], 0)
+          }
+        }
+
+        // 处理光标在图片前端时，输入文字内容的情况
+        if (anchorNode[0].nodeType === 3 && $(anchorNode[0].parentElement).hasClass('art-img-box') && $(anchorNode[0].parentElement).hasClass('loading')) {
+          $(anchorNode[0].parentElement).before(anchorNode)
+          selection.collapse(anchorNode[0], 1)
+        }
+
+      })
     }
   });
 
