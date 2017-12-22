@@ -52,12 +52,6 @@ $(function () {
       editor.insertImage('http://react-china.org/uploads/default/38/c4b96a594bd352e0.png')
     })
 
-
-    var wid = editor.preUpload()
-    editor.updateProgress(wid, '30%')
-
-    var wid2 = editor.preUpload()
-    editor.updateProgress(wid2, '30%')
 });
 
 /**********************
@@ -131,9 +125,18 @@ function uploadSuccess (guid, src) {
 }
 
 /**
+ * 图片上传失败， 删除图片
+ * @param {*} guid 
+ */
+function uploadFail (guid) {
+  return editor.uploadFail(guid)
+}
+
+/**
  * 判断当前编辑器内是否有文件正在上传
  * @return {Boolean} - 是否有正在上传的文件
  */
 function isUploading () {
   return editor.isUploading()
 }
+

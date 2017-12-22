@@ -242,6 +242,10 @@
         $(_this).trigger('art-uploading')
       }
     },
+    uploadFail: function (guid) {
+      var imgBox = this.find('div[guid="' + guid + '"]')
+      imgBox.remove()
+    },
     upload: function (data) {
       var _this = this,
         filed = _this._opt.uploadField || 'file';
@@ -408,7 +412,6 @@
             selection.collapse(br[0], 0)
           }
         }
-
         // 处理光标在图片前端时，输入文字内容的情况
         if (anchorNode[0].nodeType === 3 && $(anchorNode[0].parentElement).hasClass('art-img-box') && $(anchorNode[0].parentElement).hasClass('loading')) {
           $(anchorNode[0].parentElement).before(anchorNode)
