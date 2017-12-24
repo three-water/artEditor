@@ -93,7 +93,7 @@
     compressFile: function (file) {
       var _this = this;
       return new Promise(function (resolve, reject) {
-        if (file.size / 1024 > _this._opt.compressSize) {
+        if (/\.gif$/.test(file.name.toLowerCase()) && file.size / 1024 > _this._opt.compressSize) {
           var reader = new FileReader();
           reader.readAsDataURL(file);
           reader.onload = function (f) {
@@ -106,7 +106,7 @@
               // 覆写图片上传方法
               if (_this._opt.showServer) {
                 var blob = _this.convertBase64UrlToBlob(data)
-                resolve(_this.convertBase64UrlToBlob(data));
+                resolve(blob);
               }
             }, 10);
           }

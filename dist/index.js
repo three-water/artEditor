@@ -93,7 +93,7 @@
     compressFile: function (file) {
       var _this = this;
       return new Promise(function (resolve, reject) {
-        if (file.size / 1024 > _this._opt.compressSize) {
+        if (/\.gif$/.test(file.name.toLowerCase()) && file.size / 1024 > _this._opt.compressSize) {
           var reader = new FileReader();
           reader.readAsDataURL(file);
           reader.onload = function (f) {
@@ -106,7 +106,7 @@
               // 覆写图片上传方法
               if (_this._opt.showServer) {
                 var blob = _this.convertBase64UrlToBlob(data)
-                resolve(_this.convertBase64UrlToBlob(data));
+                resolve(blob);
               }
             }, 10);
           }
@@ -241,6 +241,10 @@
         $(_this).trigger('input')
         $(_this).trigger('art-uploading')
       }
+    },
+    uploadFail: function (guid) {
+      var imgBox = this.find('div[guid="' + guid + '"]')
+      imgBox.remove()
     },
     upload: function (data) {
       var _this = this,
@@ -408,7 +412,6 @@
             selection.collapse(br[0], 0)
           }
         }
-
         // 处理光标在图片前端时，输入文字内容的情况
         if (anchorNode[0].nodeType === 3 && $(anchorNode[0].parentElement).hasClass('art-img-box') && $(anchorNode[0].parentElement).hasClass('loading')) {
           $(anchorNode[0].parentElement).before(anchorNode)
