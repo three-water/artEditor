@@ -80,10 +80,41 @@ body {
   background-size: 100%;
 }
 
+.art-video-box.loading,
 .art-img-box.loading {
   opacity: 0.6;
   position: relative;
 }
+
+.art-video-box {
+  position: relative;
+}
+
+.art-video-box img {
+  max-height: 245px;
+  object-fit: cover;
+}
+
+.art-video-box .mook {
+  position: absolute;
+  top: 32%;
+  left: 38%;
+  z-index: 1;
+  display: none;
+  width: 80px;
+  height: 80px;
+  padding: 0;
+}
+
+.art-video-box img:nth-of-type(2) {
+  display: block;
+}
+
+.art-img-box.loading .mook {
+  display: none;
+}
+
+.art-video-box .progress,
 .art-img-box .progress {
   display: none;
   position: absolute;
@@ -95,6 +126,8 @@ body {
   z-index: 2;
   transition: width 0.5s;
 }
+
+.art-video-box.loading .progress,
 .art-img-box.loading .progress {
   display: block;
 }

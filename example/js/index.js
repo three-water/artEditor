@@ -1,14 +1,15 @@
 var editor = $('#content')
+var flag = false
 $(function () {
     "use strict";
     editor = $('#content').artEditor({
         imgTar: '#imageUpload',
         showServer: true,
-        uploadUrl: 'https://app-api.yirimao.com/file/upload',
+        uploadUrl: 'http://admin-api.s1.natapp.cc/file/upload',
         data: {},
         uploadField: 'file',
         breaks: false,
-        placeholder: '请输入内容',
+        placeholader: '请输入文章正文内容',
         validHtml: ["<br/>"],
         showUploadBtn: false,
         uploadSuccess: function (res) {
@@ -38,6 +39,7 @@ $(function () {
             alert('网络异常' + status)
         }
     });
+    console.log(editor)
 
     $('#getValue').on('click', function () {
       var html = editor.getValue()
@@ -52,6 +54,28 @@ $(function () {
       editor.insertImage('http://react-china.org/uploads/default/38/c4b96a594bd352e0.png')
     })
 
+    $('#boldFont').on('click', function () {
+      editor.boldFont(editor)
+    })
+
+    $('#content').on('click', function (e) {
+      var target = event.target
+      var twClass = $(target).parent().attr('class')
+      if (twClass && twClass.indexOf('art-video-box') >= 0) {
+        var src = $('#twVideoPlay')[0].dataset.video
+        var videoHandler =  '?x-oss-process=video/snapshot,t_0,f_png,w_0,h_0,m_fast'
+        if (src.length > 0) {
+          src = src.replace(videoHandler, '')
+        }
+        var ua = window.navigator.userAgent.toLowerCase()
+        if (/iphone|ipad|ipod/.test(ua)) {
+            window.webkit.messageHandlers.EditorIsVideoCick.postMessage({videoSrc: src})
+        } else if (/android/.test(ua)) {
+          console.log('单击android视频')
+          window.EditorNativeCallBack.onClickVideo(src)
+        }
+      }
+    })
 });
 
 /**********************
@@ -125,14 +149,6 @@ function uploadSuccess (guid, src) {
 }
 
 /**
- * 图片上传失败， 删除图片
- * @param {*} guid 
- */
-function uploadFail (guid) {
-  return editor.uploadFail(guid)
-}
-
-/**
  * 判断当前编辑器内是否有文件正在上传
  * @return {Boolean} - 是否有正在上传的文件
  */
@@ -140,3 +156,27 @@ function isUploading () {
   return editor.isUploading()
 }
 
+/**
+ * 判断当前编辑器内是否有上传过
+ * @return {Boolean} - 是否上传过视频
+ */
+function isVideoUploaded() {
+  return editor.isVideoUploaded()
+}
+
+/**
+ * 上传视频前插如图片
+ * @return {String} - guid唯一标识
+ */
+function videoPreUpload () {
+  return editor.videoPreUpload()
+}
+
+/**
+ * 完成图片上传
+ * @param {*} guid - 上传实例的guid
+ * @param {*} src - 视频的oss url地址片
+ */
+function videoUploadSuccess (guid, src, mask) {
+  return editor.videoUploadSuccess(guid, src, mask)
+}
